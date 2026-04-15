@@ -45,6 +45,8 @@ This project uses AI to generate dynamic recipes based on user input.
 ```bash
 pip install -r requirements.txt
 flask run
+
+
 # 📸 Screenshots
 
 ## 🏠 Homepage
@@ -56,6 +58,6 @@ flask run
 ## 📝 Blog Page
 ![Blog](blog.png)
 
-## 📝 More Blog Views
+**## 📝 More Blog Views
 ![Blog1](blog1.png)
-![Blog2](blog2.png)
+![Blog2](blog2.png)**

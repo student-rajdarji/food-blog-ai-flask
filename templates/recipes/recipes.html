@@ -1,0 +1,81 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class="container my-5">
+
+    <h2 class="fw-bold text-center mb-4">
+        🍽️ Recipes
+    </h2>
+
+    {% if recipes %}
+    <div class="row g-4">
+
+        {% for recipe in recipes %}
+        <div class="col-md-4">
+            <a href="{{ url_for('blog.blog_detail', slug=recipe.slug) }}"
+               class="text-decoration-none text-dark">
+
+                <div class="card h-100 shadow-sm recipe-card">
+
+                    {% if recipe.image_url %}
+                        <img src="{{ url_for('static', filename=recipe.image_url) }}"
+                             class="card-img-top"
+                             style="height:230px; object-fit:cover;">
+                    {% else %}
+                        <img src="{{ url_for('static', filename='images/default_recipe.jpg') }}"
+                             class="card-img-top"
+                             style="height:230px; object-fit:cover;">
+                    {% endif %}
+
+                    <div class="card-body">
+
+                        {% if recipe.category %}
+                        <span class="badge bg-success mb-2">
+                            {{ recipe.category }}
+                        </span>
+                        {% endif %}
+
+                        <h5 class="card-title mt-2 fw-bold">
+                            {{ recipe.recipe_name or recipe.title }}
+                        </h5>
+
+                        {% if recipe.excerpt %}
+                        <p class="text-muted small">
+                            {{ recipe.excerpt[:90] }}...
+                        </p>
+                        {% endif %}
+
+                    </div>
+
+                </div>
+            </a>
+        </div>
+        {% endfor %}
+
+    </div>
+
+    {% else %}
+    <div class="text-center text-muted py-5">
+        <h5>No recipes available yet 😔</h5>
+        <a href="{{ url_for('blog.blogs') }}" class="btn btn-danger mt-3">
+            Browse Blogs
+        </a>
+    </div>
+    {% endif %}
+
+</div>
+
+<style>
+.recipe-card {
+    border-radius: 16px;
+    overflow: hidden;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.recipe-card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 12px 25px rgba(0,0,0,0.15);
+}
+</style>
+
+{% endblock %}

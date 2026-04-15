@@ -1,0 +1,1029 @@
+{% extends "base.html" %}
+{% block content %}
+
+{% set dummy_slugs = [
+    "healthy-breakfast-ideas",
+    "quick-lunch-recipes",
+    "evening-snacks",
+    "dinner-specials",
+    "pizza-lovers",
+    "burgers-more"
+] %}
+
+<div class="container mt-5 mb-5">
+
+    <!-- TITLE -->
+    <h1 class="fw-bold mb-2">{{ blog.title }}</h1>
+
+    <!-- ⭐ RATING (BEST PLACE) -->
+<div class="mb-2">
+
+    {% if blog.calculate_rating() %}
+
+        <span class="rating-stars">
+            {{ blog.get_star_rating() }}
+        </span>
+
+        <span class="rating-number">
+            {{ blog.calculate_rating() }}/5 Rating
+        </span>
+
+    {% else %}
+
+        <span class="text-muted">No rating yet</span>
+
+    {% endif %}
+
+</div>
+
+    <!-- ACTIONS -->
+    <button onclick="window.print()" class="btn action-btn mb-3">
+        🖨 Print / Download PDF
+    </button>
+
+    <div class="mb-3">
+        {% if current_user.is_authenticated %}
+            <form action="{{ url_for('save.save_recipe', blog_id=blog.id) }}" method="POST">
+                <button class="btn btn-outline-danger">❤️ Save Recipe</button>
+            </form>
+        {% else %}
+            <a href="{{ url_for('auth.login') }}" class="btn btn-outline-danger">
+                ❤️ Save 
+            </a>
+        {% endif %}
+    </div>
+
+    <!-- META -->
+    <div class="text-muted mb-3">
+        📅 {{ blog.created_at.strftime('%d %B %Y') }} · ⏱ 5 min read
+    </div>
+
+    <!-- ✍ AUTHOR + EDIT / DELETE -->
+<!-- AUTHOR -->
+   <p class="text-muted mb-2">
+    ✍ Written by
+    <strong>
+      {{ blog.author.username if blog.author else "FoodieAI" }}
+    </strong>
+</p>
+
+
+    <!-- LEFT : EDIT / DELETE -->
+   <!-- EDIT / DELETE -->
+{% if current_user.is_authenticated and
+      (current_user.id == blog.user_id or current_user.username == "raj") %}
+
+<div class="d-flex align-items-center gap-2 mb-3">
+
+    <a href="{{ url_for('blog.edit_blog', id=blog.id) }}"
+       class="btn btn-warning btn-sm">
+        ✏️ Edit
+    </a>
+
+    <form method="POST"
+          action="{{ url_for('blog.delete_blog', id=blog.id) }}"
+          class="m-0">
+        <button class="btn btn-danger btn-sm">
+            🗑 Delete
+        </button>
+    </form>
+
+</div>
+
+{% endif %}
+<!-- SHARE -->
+<div class="d-flex gap-3 mb-4">
+
+    <a href="https://wa.me/?text={{ blog.title }} - {{ request.url }}"
+       target="_blank"
+       class="share-icon whatsapp">
+        <i class="fab fa-whatsapp"></i>
+    </a>
+
+    <a href="{{ request.url }}"
+       onclick="navigator.clipboard.writeText(this.href)"
+       class="share-icon instagram">
+        <i class="fab fa-instagram"></i>
+    </a>
+
+    <a href="https://www.facebook.com/sharer/sharer.php?u={{ request.url }}"
+       target="_blank"
+       class="share-icon facebook">
+        <i class="fab fa-facebook-f"></i>
+    </a>
+
+</div>
+
+    <!-- HERO IMAGE -->
+<!-- HERO IMAGE -->
+ {% if blog.image_url %}
+    <img src="{{ url_for('static', filename=blog.image_url) }}"
+         class="img-fluid rounded my-4"
+         style="max-height:420px; width:100%; object-fit:cover;">
+    {% endif %}
+
+
+
+ <!-- 🎥 VIDEO (FINAL FIX – DO NOT MODIFY) -->
+<!-- 🎥 VIDEO SECTION (FINAL & SAFE) -->
+
+{% if blog.video_url %}
+<div class="video-wrapper mb-5">
+    <div class="ratio ratio-16x9">
+        <iframe
+            src="{{ blog.video_url | replace('watch?v=', 'embed/') }}"
+            title="Recipe Video"
+            allowfullscreen
+            loading="lazy">
+        </iframe>
+    </div>
+</div>
+
+{% else %}
+    {# ---- Dummy blog fallback ---- #}
+    {% set video_map = {
+        "healthy-breakfast-ideas": "LtnrmEd_msY",
+        "quick-lunch-recipes": "LPU2__ZETX4",
+        "evening-snacks": "s8yK8gUwomM",
+        "dinner-specials": "F7uwFUcO0Tw",
+        "pizza-lovers": "PK0czgdbHoY",
+        "burgers-more": "_q5GKCNZcHI"
+    } %}
+
+    {% set video_id = video_map.get(blog.slug) %}
+    {% if video_id %}
+    <div class="video-wrapper mb-5">
+        <div class="ratio ratio-16x9">
+            <iframe
+                src="https://www.youtube.com/embed/{{ video_id }}"
+                title="Recipe Video"
+                allowfullscreen
+                loading="lazy">
+            </iframe>
+        </div>
+    </div>
+    {% endif %}
+{% endif %}
+    <!-- CONTENT -->
+    <p class="fs-5">{{ blog.content }}</p>
+
+    {% if blog.excerpt %}
+        <p class="text-muted">{{ blog.excerpt }}</p>
+    {% endif %}
+
+    <hr class="my-5">
+
+    {% if blog.slug in dummy_slugs %}
+   <!-- INGREDIENTS + STEPS -->
+<!-- INGREDIENTS (FULL WIDTH) -->
+<div class="mt-5">
+    <div class="section-box section-soft">
+        <h4 class="fw-bold mb-3">🧺 Ingredients</h4>
+
+        {% if blog.slug == "healthy-breakfast-ideas" %}
+        <ul>
+            <li>Oats / whole grains</li>
+            <li>Fresh fruits (banana, berries)</li>
+            <li>Nuts & seeds</li>
+            <li>Honey or yogurt</li>
+        </ul>
+
+        {% elif blog.slug == "quick-lunch-recipes" %}
+        <ul>
+            <li>Boiled eggs / paneer</li>
+            <li>Whole wheat bread</li>
+            <li>Fresh vegetables</li>
+            <li>Olive oil & spices</li>
+        </ul>
+
+        {% elif blog.slug == "evening-snacks" %}
+        <ul>
+            <li>Whole wheat waffles / plain waffles</li>
+            <li>Fresh strawberries (sliced)</li>
+            <li>Blueberries</li>
+            <li>Banana slices (optional)</li>
+            <li>Thick yogurt or fresh cream</li>
+            <li>Honey or maple syrup</li>
+            <li>Nuts (almonds / walnuts – optional)</li>
+        </ul>
+
+        {% elif blog.slug == "dinner-specials" %}
+        <ul>
+            <li>Rice / roti</li>
+            <li>Vegetable curry</li>
+            <li>Protein (chicken/paneer)</li>
+            <li>Spices & ghee</li>
+        </ul>
+
+        {% elif blog.slug == "pizza-lovers" %}
+        <ul>
+            <li>Pizza base</li>
+            <li>Mozzarella cheese</li>
+            <li>Bell peppers & olives</li>
+            <li>Pizza sauce</li>
+        </ul>
+
+        {% elif blog.slug == "burgers-more" %}
+        <ul>
+            <li>Burger buns</li>
+            <li>Veg/Chicken patty</li>
+            <li>Cheese slice</li>
+            <li>Lettuce & sauces</li>
+        </ul>
+        {% endif %}
+    </div>
+</div>
+
+
+<!-- PREPARATION STEPS (FULL WIDTH) -->
+<div class="mt-4">
+    <div class="section-box section-blue">
+        <h4 class="fw-bold mb-3">👨‍🍳 Preparation Steps</h4>
+
+        {% if blog.slug == "healthy-breakfast-ideas" %}
+        <ol>
+            <li>Cook oats with water or milk.</li>
+            <li>Add fruits and nuts.</li>
+            <li>Drizzle honey and serve fresh.</li>
+        </ol>
+
+        {% elif blog.slug == "quick-lunch-recipes" %}
+        <ol>
+            <li>Toast bread lightly.</li>
+            <li>Add eggs or paneer filling.</li>
+            <li>Season and serve hot.</li>
+        </ol>
+
+        {% elif blog.slug == "evening-snacks" %}
+        <ol>
+            <li>Prepare or lightly toast the waffles until warm and crisp.</li>
+            <li>Place the waffles on a serving plate.</li>
+            <li>Spread yogurt or cream evenly on top.</li>
+            <li>Arrange strawberries, blueberries, and banana slices.</li>
+            <li>Drizzle honey or maple syrup over the fruits.</li>
+            <li>Sprinkle chopped nuts for added crunch.</li>
+            <li>Serve immediately.</li>
+        </ol>
+
+        {% elif blog.slug == "dinner-specials" %}
+        <ol>
+            <li>Prepare curry.</li>
+            <li>Cook rice or roti.</li>
+            <li>Serve hot dinner.</li>
+        </ol>
+
+        {% elif blog.slug == "pizza-lovers" %}
+        <ol>
+            <li>Prepare pizza base.</li>
+            <li>Add toppings & cheese.</li>
+            <li>Bake until golden.</li>
+        </ol>
+
+        {% elif blog.slug == "burgers-more" %}
+        <ol>
+            <li>Grill patty.</li>
+            <li>Assemble burger.</li>
+            <li>Serve with fries.</li>
+        </ol>
+        {% endif %}
+    </div>
+</div>
+        <!-- 🍽 SERVING INFO -->
+<div class="mt-4 mb-4">
+    <div class="section-box section-soft">
+    <div class="d-flex flex-wrap gap-3 text-muted fw-semibold">
+
+        {% if blog.slug == "healthy-breakfast-ideas" %}
+        <span>🍽 Serves: 1</span>
+        <span>⏱ Prep Time: 5 mins</span>
+        <span>🔥 Calories: ~280 kcal</span>
+
+        {% elif blog.slug == "quick-lunch-recipes" %}
+        <span>🍽 Serves: 2</span>
+        <span>⏱ Prep Time: 15 mins</span>
+        <span>🔥 Calories: ~420 kcal</span>
+
+        {% elif blog.slug == "evening-snacks" %}
+        <span>🍽 Serves: 2</span>
+        <span>⏱ Prep Time: 10 mins</span>
+        <span>🔥 Calories: ~200 kcal</span>
+
+        {% elif blog.slug == "dinner-specials" %}
+        <span>🍽 Serves: 3</span>
+        <span>⏱ Prep Time: 25 mins</span>
+        <span>🔥 Calories: ~520 kcal</span>
+
+        {% elif blog.slug == "pizza-lovers" %}
+        <span>🍽 Serves: 2</span>
+        <span>⏱ Prep Time: 30 mins</span>
+        <span>🔥 Calories: ~600 kcal</span>
+
+        {% elif blog.slug == "burgers-more" %}
+        <span>🍽 Serves: 2</span>
+        <span>⏱ Prep Time: 20 mins</span>
+        <span>🔥 Calories: ~550 kcal</span>
+        {% endif %}
+
+    </div>
+</div>
+</div>
+
+    <!-- 🥗 NUTRITION HIGHLIGHTS -->
+<div class="mt-5 p-4 rounded shadow-sm" style="background:#f9fff9;">
+    <div class="section-box section-green">
+    <h4 class="fw-bold mb-3">🥗 Nutrition Highlights</h4>
+
+    <ul class="mb-0">
+
+        {% if blog.slug == "healthy-breakfast-ideas" %}
+        <li>✅ High in fiber</li>
+        <li>✅ Rich in antioxidants</li>
+        <li>✅ No refined sugar</li>
+        <li>✅ Energy-boosting breakfast</li>
+
+        {% elif blog.slug == "quick-lunch-recipes" %}
+        <li>✅ Balanced carbohydrates & protein</li>
+        <li>✅ Keeps you full for longer</li>
+        <li>✅ Low in unhealthy fats</li>
+        <li>✅ Ideal for busy workdays</li>
+
+        {% elif blog.slug == "evening-snacks" %}
+        <li>✅ Rich in antioxidants from berries</li>
+        <li>✅ Provides quick energy</li>
+        <li>✅ Good source of fiber</li>
+        <li>✅ Kid-friendly & tea-time snack</li>
+        <li>✅ Can be made healthier with whole wheat waffles</li>
+
+        {% elif blog.slug == "dinner-specials" %}
+        <li>✅ Well-balanced dinner option</li>
+        <li>✅ Supports overnight recovery</li>
+        <li>✅ Rich in essential nutrients</li>
+        <li>✅ Comforting yet healthy</li>
+
+        {% elif blog.slug == "pizza-lovers" %}
+        <li>✅ Homemade & preservative-free</li>
+        <li>✅ Better than store-bought pizza</li>
+        <li>✅ Can be customized for health</li>
+        <li>✅ Satisfying comfort food</li>
+
+        {% elif blog.slug == "burgers-more" %}
+        <li>✅ Homemade & hygienic</li>
+        <li>✅ Protein-rich option</li>
+        <li>✅ Customizable ingredients</li>
+        <li>✅ Weekend-friendly meal</li>
+        {% endif %}
+
+    </ul>
+</div>
+</div>
+
+<!-- 💡 TIPS & VARIATIONS -->
+<div class="mt-5 p-4 rounded shadow-sm" style="background:#fffdf5;">
+    <div class="section-box section-yellow">
+    <h4 class="fw-bold mb-3">💡 Tips & Variations</h4>
+
+    <ul class="mb-0">
+
+        {% if blog.slug == "healthy-breakfast-ideas" %}
+        <li>Swap honey with maple syrup for a vegan option.</li>
+        <li>Add chia or flax seeds for extra fiber.</li>
+        <li>Use Greek yogurt for more protein.</li>
+
+        {% elif blog.slug == "quick-lunch-recipes" %}
+        <li>Use whole-wheat bread for a healthier version.</li>
+        <li>Add grilled vegetables for extra nutrition.</li>
+        <li>Replace mayo with yogurt for lower fat.</li>
+
+        {% elif blog.slug == "evening-snacks" %}
+        <li>Use whole wheat waffles for a healthier option.</li>
+        <li>Replace cream with Greek yogurt for higher protein.</li>
+        <li>Skip syrup for a low-sugar version.</li>
+        <li>Add chia seeds or flax seeds for extra nutrition.</li>
+        <li>Serve with green tea or black coffee.</li>
+
+        {% elif blog.slug == "dinner-specials" %}
+        <li>Pair with a fresh salad for balance.</li>
+        <li>Reduce oil for a lighter dinner.</li>
+        <li>Add herbs like coriander or basil for aroma.</li>
+
+        {% elif blog.slug == "pizza-lovers" %}
+        <li>Use whole-wheat pizza base for health.</li>
+        <li>Add more veggies to increase fiber.</li>
+        <li>Use low-fat cheese to reduce calories.</li>
+
+        {% elif blog.slug == "burgers-more" %}
+        <li>Grill patties instead of frying.</li>
+        <li>Use lettuce wraps instead of buns.</li>
+        <li>Add avocado slices for healthy fats.</li>
+        {% endif %}
+
+    </ul>
+</div>
+</div>
+
+
+
+    <div class="alert alert-light border mt-5">
+        💡 <strong>Tip:</strong> Customize ingredients as per your taste.
+    </div>
+
+    <!-- Author Card (No Image) -->
+<div class="author-card">
+    <div class="section-box section-soft">
+  <h4>Written by FoodieAI</h4>
+  <p>
+    Simple, healthy & delicious food ideas powered by AI.
+    Curated with care to make everyday cooking easy and enjoyable.
+  </p>
+</div>
+</div>
+
+<!-- categories-->
+{% else %}
+<!-- 🧺 INGREDIENTS -->
+<div class="section-box section-soft">
+<h4 class="section-title">🧺 Ingredients</h4>
+    <ul>
+        {% for item in blog.ingredients.split('\n') %}
+            {% if item.strip() %}
+                <li>{{ item }}</li>
+            {% endif %}
+        {% endfor %}
+    </ul>
+</div>
+
+<!-- 👨‍🍳 PREPARATION STEPS -->
+<div class="section-box section-blue">
+<h4 class="section-title">👨‍🍳 Preparation Steps</h4>
+    <ol>
+        {% for step in blog.steps.split('\n') %}
+            {% if step.strip() %}
+                <li>{{ step }}</li>
+            {% endif %}
+        {% endfor %}
+    </ol>
+</div>
+
+<!-- 🍽 SERVING INFO -->
+<div class="section-box section-soft">
+<h4 class="section-title">🍽 Serving Info</h4>
+    <ul>
+        {% for info in blog.serving_info.split('\n') %}
+            {% if info.strip() %}
+                <li>{{ info }}</li>
+            {% endif %}
+        {% endfor %}
+    </ul>
+</div>
+
+<!-- 🥗 NUTRITION HIGHLIGHTS -->
+<div class="section-box section-green">
+ <h4 class="section-title">🥗 Nutrition Highlights</h4>
+    <ul>
+        {% for n in blog.nutrition.split('\n') %}
+            {% if n.strip() %}
+                <li>{{ n }}</li>
+            {% endif %}
+        {% endfor %}
+    </ul>
+</div>
+
+<!-- 💡 TIPS & VARIATIONS -->
+<div class="section-box section-yellow">
+    <h4 class="section-title">💡 Tips & Variations</h4>
+    <ul>
+        {% for tip in blog.tips.split('\n') %}
+            {% if tip.strip() %}
+                <li>{{ tip }}</li>
+            {% endif %}
+        {% endfor %}
+    </ul>
+</div>
+
+<!-- 💡 TIP BOX (SAME AS DUMMY BLOGS) -->
+<!-- 💡 TIP (CATEGORY BLOG – SAME STYLE) -->
+<div class="mt-4">
+    <div class="section-box section-soft">
+        <h4 class="section-title">💡 Tip</h4>
+        <p class="mb-0">
+            {{ "Customize ingredients as per your taste." }}
+        </p>
+    </div>
+</div>
+
+   <!-- ✍ AUTHOR (CATEGORY BLOG – SAME STYLE) -->
+<div class="mt-5">
+    <div class="section-box section-soft author-card">
+        <h4 class="section-title">Written by FoodieAI</h4>
+        <p class="mb-0 text-muted">
+            Simple, healthy & delicious food ideas powered by AI.
+            Curated with care to make everyday cooking easy and enjoyable.
+        </p>
+    </div>
+</div>
+
+{% endif %}
+<!-- ================= COMMENTS SECTION (FOR BOTH DUMMY + USER BLOGS) ================= -->
+
+<hr class="my-5">
+
+<div class="section-box section-soft">
+
+<h4 class="fw-bold mb-3">
+💬 Comments ({{ blog.comments|length }})
+</h4>
+
+{% if current_user.is_authenticated %}
+
+<form method="POST"
+      action="{{ url_for('comment.add_comment', blog_id=blog.id) }}">
+
+<textarea name="text"
+          class="form-control mb-3"
+          rows="3"
+          placeholder="Write your comment..."
+          required></textarea>
+
+<button class="btn btn-danger btn-sm">
+Post Comment
+</button>
+
+</form>
+
+{% else %}
+
+<div class="alert">
+🔒 Please <a href="{{ url_for('auth.login') }}">login</a> to comment.
+</div>
+
+{% endif %}
+
+
+<div class="mt-4">
+
+{% for comment in blog.comments|sort(attribute='created_at', reverse=True) %}
+
+<div class="card mb-3 shadow-sm border-0">
+
+<div class="card-body">
+
+<div class="d-flex justify-content-between align-items-center">
+
+<div>
+<strong>{{ comment.user.username }}</strong>
+<br>
+<small class="text-muted">
+{{ comment.created_at.strftime('%d %b %Y') }}
+</small>
+</div>
+
+
+<!-- DELETE BUTTON -->
+{% if current_user.is_authenticated and
+      (current_user.id == comment.user_id
+       or current_user.id == blog.user_id
+       or current_user.username == "raj") %}
+
+<form method="POST"
+      action="{{ url_for('comment.delete_comment', comment_id=comment.id) }}"
+      style="display:inline;">
+
+<button class="btn btn-sm btn-outline-danger delete-btn">
+Delete
+</button>
+
+</form>
+
+{% endif %}
+
+</div>
+
+<p class="mt-2 mb-0">
+{{ comment.text }}
+</p>
+
+</div>
+
+</div>
+
+{% endfor %}
+
+</div>
+
+</div>
+<style>
+    .section-box ul,
+.section-box ol {
+    padding-left: 20px;
+    line-height: 1.8;
+    }
+/* Section title styling */
+.section-title {
+    font-weight: 700;          /* BOLD */
+    font-size: 20px;
+    margin-bottom: 14px;
+    color: #222;
+}
+
+/* List spacing */
+.section-box ul,
+.section-box ol {
+    padding-left: 20px;
+}
+
+.section-box li {
+    margin-bottom: 6px;
+    line-height: 1.6;
+}
+.section-title {
+    font-weight: 700;
+}
+
+.author-card p {
+    font-size: 15px;
+    line-height: 1.6;
+}
+
+</style>
+<style>
+    /* ===== BLOG DETAIL SECTION VISUAL SEPARATION ===== */
+
+/* ===============================
+   BLOG DETAIL – SECTION STYLES
+================================ */
+
+.section-box {
+    background: #ffffff;
+    border-radius: 14px;
+    padding: 24px;
+    margin-bottom: 40px;
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.05);
+}
+
+/* Light theme variations */
+.section-soft {
+    background: #f9fafb;
+}
+
+.section-green {
+    background: #f3fff3;
+}
+
+.section-yellow {
+    background: #fffdf5;
+}
+.section-blue{
+    background: #f4f8ff;
+}
+
+/* ===============================
+   SHARE ICONS
+================================ */
+
+.share-icon {
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    color: #fff;
+    text-decoration: none;
+    transition: all 0.25s ease;
+}
+
+.share-icon.whatsapp {
+    background: #25D366;
+}
+
+.share-icon.instagram {
+    background: linear-gradient(45deg, #f58529, #dd2a7b, #8134af);
+}
+
+.share-icon.facebook {
+    background: #1877F2;
+}
+
+.share-icon:hover {
+    transform: translateY(-3px) scale(1.05);
+    box-shadow: 0 6px 18px rgba(0,0,0,0.25);
+    color: #fff;
+}
+
+
+/* ===============================
+   ACTION BAR
+================================ */
+
+.blog-action-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 12px;
+}
+
+.action-right {
+    display: flex;
+    gap: 10px;
+}
+
+.action-bar .btn {
+    border-radius: 20px;
+}
+
+
+/* ===============================
+   PRINT / PDF BUTTON
+================================ */
+
+.action-btn {
+    border: 2px solid #000 !important;
+    color: #000 !important;
+    background: transparent !important;
+    font-weight: 500;
+    border-radius: 12px;
+    padding: 6px 14px;
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.action-btn:hover {
+    background: #000 !important;
+    color: #fff !important;
+}
+
+
+
+
+
+
+/* ===============================
+   PRINT / PDF MODE
+================================ */
+
+@media print {
+
+    nav,
+    footer,
+    .navbar,
+    .footer-section,
+    .btn,
+    .share-icon,
+    .alert,
+    .author-card {
+        display: none !important;
+    }
+
+    body {
+        background: #fff !important;
+        font-size: 14px;
+        color: #000;
+    }
+
+    h1 {
+        text-align: center;
+        font-size: 26px;
+        margin-bottom: 15px;
+    }
+
+    .section-box {
+        box-shadow: none !important;
+        border: 1px solid #ddd;
+        margin-bottom: 20px;
+        page-break-inside: avoid;
+    }
+
+    img {
+        max-width: 100%;
+        height: auto;
+        margin-bottom: 10px;
+        page-break-inside: avoid;
+    }
+
+    ul,
+    ol {
+        padding-left: 20px;
+    }
+
+    h4 {
+        page-break-after: avoid;
+    }
+}
+
+.video-wrapper {
+    max-width: 900px;   /* controls size */
+    margin: 0 auto 40px auto; /* center + spacing */
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 12px 30px rgba(0,0,0,0.15);
+}
+
+.list-styled {
+    padding-left: 18px;
+    line-height: 1.8;
+}
+
+.list-styled li {
+    margin-bottom: 6px;
+}
+
+/* === ICON FIX (DO NOT TOUCH OTHER STYLES) === */
+
+.blog-action-bar {
+    align-items: flex-start;   /* fixes vertical misalignment */
+}
+
+.action-left {
+    display: flex;
+    gap: 8px;
+}
+
+.action-right {
+    display: flex;
+    align-items: center;       /* centers icons vertically */
+    gap: 12px;
+}
+
+/* Make edit/delete same height as icons */
+.action-left .btn {
+    height: 42px;
+    display: inline-flex;
+    align-items: center;
+}
+
+/* ===============================
+   COMMENTS CONTAINER
+================================ */
+
+.section-box.section-soft {
+    background: #ffffff;
+    border-radius: 16px;
+    padding: 24px;
+    margin-top: 40px;
+    box-shadow: 0 6px 20px rgba(0,0,0,0.06);
+    border: 1px solid #f0f0f0;
+}
+
+
+/* ===============================
+   COMMENTS TITLE
+================================ */
+
+.section-box h4 {
+    font-size: 22px;
+    font-weight: 700;
+    color: #222;
+    margin-bottom: 20px;
+}
+
+
+/* ===============================
+   LOGIN ALERT BOX
+================================ */
+
+.section-box .alert {
+    background: #fff8e6;
+    border: 1px solid #ffe2a8;
+    color: #8a6d3b;
+    border-radius: 10px;
+    padding: 12px 16px;
+    font-size: 14px;
+}
+
+/* REMOVE BLUE LINK COLOR */
+.section-box .alert a {
+    color: #e74c3c;   /* FoodieAI red */
+    font-weight: 600;
+    text-decoration: none;
+}
+
+.section-box .alert a:hover {
+    text-decoration: underline;
+}
+
+
+/* ===============================
+   COMMENT CARD
+================================ */
+
+.section-box .card {
+    background: #fafafa;
+    border-radius: 12px;
+    padding: 16px;
+    border: 1px solid #eee;
+    margin-bottom: 12px;
+    transition: all 0.2s ease;
+}
+
+.section-box .card:hover {
+    background: #fff;
+    box-shadow: 0 4px 14px rgba(0,0,0,0.06);
+}
+
+
+/* ===============================
+   USERNAME
+================================ */
+
+.section-box .card strong {
+    color: #222;
+    font-size: 15px;
+    font-weight: 600;
+}
+
+
+/* ===============================
+   DATE
+================================ */
+
+.section-box .card small {
+    color: #999;
+    font-size: 13px;
+}
+
+
+/* ===============================
+   COMMENT TEXT
+================================ */
+
+.section-box .card p {
+    color: #444;
+    font-size: 15px;
+    margin-top: 6px;
+    line-height: 1.5;
+}
+
+
+/* ===============================
+   TEXTAREA
+================================ */
+
+.section-box textarea {
+    border-radius: 10px;
+    border: 1px solid #ddd;
+    padding: 10px;
+    font-size: 14px;
+}
+
+.section-box textarea:focus {
+    border-color: #e74c3c;
+    box-shadow: 0 0 0 2px rgba(231,76,60,0.1);
+    outline: none;
+}
+
+
+/* ===============================
+   BUTTON
+================================ */
+
+.section-box button {
+    background: #e74c3c;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    padding: 6px 18px;
+    font-size: 14px;
+}
+
+.section-box button:hover {
+    background: #c0392b;
+}
+
+.delete-btn {
+    border-radius: 6px;
+    font-size: 12px;
+    padding: 3px 10px;
+}
+
+.delete-btn:hover {
+    background: #e74c3c;
+    color: white;
+}
+.rating-stars {
+    font-size: 22px;
+    color: #ffc107;
+    font-weight: bold;
+}
+.rating-box {
+
+background: #fff3cd;
+padding: 10px 15px;
+border-radius: 8px;
+font-weight: 600;
+color: #856404;
+display: inline-block;
+
+}
+.rating-number {
+    margin-left: 10px;
+    font-weight: 600;
+    color: #444;
+}
+
+
+</style>
+
+{% endblock %}

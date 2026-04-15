@@ -1,0 +1,104 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class="container mt-5 mb-5">
+    <h2 class="fw-bold mb-4">✏️ Edit Blog</h2>
+
+    <form method="POST" enctype="multipart/form-data">
+
+        <!-- TITLE -->
+        <div class="mb-3">
+            <label class="form-label fw-semibold">Blog Title</label>
+            <input type="text" name="title" class="form-control"
+                   value="{{ blog.title }}" required>
+        </div>
+
+        <!-- RECIPE NAME -->
+        <div class="mb-3">
+            <label class="form-label fw-semibold">Recipe Name</label>
+            <input type="text" name="recipe_name" class="form-control"
+                   value="{{ blog.recipe_name }}">
+        </div>
+
+        <!-- CATEGORY -->
+        <div class="mb-3">
+            <label class="form-label fw-semibold">Category</label>
+            <select name="category" class="form-select" required>
+                {% for cat in [
+                    "Healthy","Spicy","Diet","Breakfast","Vegan",
+                    "Fast Food","Indian","Italian","Dessert",
+                    "Beverages","High Protein","Quick & Easy"
+                ] %}
+                <option value="{{ cat }}"
+                    {% if blog.category == cat %}selected{% endif %}>
+                    {{ cat }}
+                </option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <!-- CONTENT -->
+        <div class="mb-3">
+            <label class="form-label fw-semibold">Content</label>
+            <textarea name="content" rows="4" class="form-control" required>{{ blog.content }}</textarea>
+        </div>
+
+        <!-- INGREDIENTS -->
+        <div class="mb-3">
+            <label class="form-label fw-semibold">Ingredients (one per line)</label>
+            <textarea name="ingredients" rows="4" class="form-control">{{ blog.ingredients }}</textarea>
+        </div>
+
+        <!-- STEPS -->
+        <div class="mb-3">
+            <label class="form-label fw-semibold">Preparation Steps</label>
+            <textarea name="steps" rows="4" class="form-control">{{ blog.steps }}</textarea>
+        </div>
+
+        <!-- SERVING INFO -->
+        <div class="mb-3">
+            <label class="form-label fw-semibold">Serving Info</label>
+            <textarea name="serving_info" class="form-control">{{ blog.serving_info }}</textarea>
+        </div>
+
+        <!-- NUTRITION -->
+        <div class="mb-3">
+            <label class="form-label fw-semibold">Nutrition Highlights</label>
+            <textarea name="nutrition" class="form-control">{{ blog.nutrition }}</textarea>
+        </div>
+
+        <!-- TIPS -->
+        <div class="mb-3">
+            <label class="form-label fw-semibold">Tips & Variations</label>
+            <textarea name="tips" class="form-control">{{ blog.tips }}</textarea>
+        </div>
+
+        <!-- IMAGE UPLOAD -->
+        <div class="mb-3">
+            <label class="form-label fw-semibold">Update Image (optional)</label>
+            <input type="file" name="image" class="form-control">
+            {% if blog.image_url %}
+                <p class="text-muted mt-1">Current image is already saved</p>
+            {% endif %}
+        </div>
+
+        <!-- VIDEO -->
+        <div class="mb-3">
+    <label class="form-label">YouTube Embed URL</label>
+    <input
+        type="url"
+        name="video_url"
+        class="form-control"
+        value="{{ blog.video_url or '' }}"
+        placeholder="https://www.youtube.com/embed/VIDEO_ID">
+</div>
+
+        <!-- BUTTONS -->
+        <button type="submit" class="btn btn-success">💾 Update Blog</button>
+        <a href="{{ url_for('blog.blog_detail', slug=blog.slug) }}"
+           class="btn btn-secondary ms-2">Cancel</a>
+
+    </form>
+</div>
+
+{% endblock %}

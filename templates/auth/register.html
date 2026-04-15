@@ -1,0 +1,77 @@
+{% extends "base.html" %}
+{% block content %}
+
+<style>
+.auth-bg{
+    background: url("https://images.unsplash.com/photo-1504674900247-0877df9cc836")
+                no-repeat center center/cover;
+    min-height: calc(100vh - 70px);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.glass-card {
+    width: 380px;              /* SAME as login */
+    padding: 30px;             /* 🔥 REDUCED – matches login */
+    border-radius: 20px;
+    backdrop-filter: blur(14px);
+    background: rgba(255, 255, 255, 0.20);
+    box-shadow: 0 12px 35px rgba(0,0,0,0.35);
+    color: white;
+    text-align: center;
+}
+
+.glass-card input {
+    width: 100%;           /* ✅ FULL WIDTH */
+    background: rgba(255, 255, 255, 0.35) !important;
+    color: #fff !important;
+    border: none !important;
+    border-radius: 14px !important;
+    padding: 16px !important;   /* ✅ SAME HEIGHT AS LOGIN */
+    margin-bottom: 18px;        /* ✅ SAME SPACING */
+    font-size: 1rem;
+}
+
+::placeholder {
+    color: #f1f1f1;
+}
+
+.btn-custom {
+    background: #e63946;
+    border-radius: 28px;
+    padding: 12px;
+    width: 100%;
+    border: none;
+    color: white;
+    font-size: 1.15rem;
+    transition: 0.3s;
+}
+
+.btn-custom:hover {
+    background: #b71c1c;
+    transform: scale(1.03);
+
+}
+</style>
+
+<div class="auth-bg">
+    <div class="glass-card">
+        <h3 class="mb-4">Create an Account ✨</h3>
+
+        <form method="POST" action="/auth/register">
+            <input name="username" placeholder="Username" required>
+            <input name="email" placeholder="Email" required>
+            <input name="password" type="password" placeholder="Password" required>
+
+            <button class="btn-custom mt-2">Register</button>
+        </form>
+
+        <p class="mt-3">
+            Already have an account?
+            <a href="/auth/login" style="color:#fff; text-decoration:underline;">Login</a>
+        </p>
+    </div>
+</div>
+
+{% endblock %}

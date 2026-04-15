@@ -1,0 +1,11 @@
+<h3>Ingredients</h3>
+
+{% if blog.ingredients %}
+  <ul>
+    {% for item in blog.ingredients.split(',') %}
+      <li>{{ item.strip() }}</li>
+    {% endfor %}
+  </ul>
+{% else %}
+  <p><em>Ingredients not available.</em></p>
+{% endif %}

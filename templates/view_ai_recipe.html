@@ -1,0 +1,57 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class="container mt-5 mb-5">
+    <div class="card shadow-lg border-0">
+        <div class="card-body p-4">
+
+            <!-- Recipe Title -->
+            <h2 class="fw-bold text-danger mb-3">
+                🍽 {{ recipe.title }}
+            </h2>
+
+            <hr>
+
+            <!-- Recipe Content -->
+            <div class="recipe-content">
+                {{ recipe.recipe | safe }}
+            </div>
+
+
+            <!-- Back Button -->
+            <div class="mt-4 text-center">
+                <a href="{{ url_for('saved.saved_recipes') }}" class="btn btn-outline-danger">
+                    ← Back to Saved Recipes
+                </a>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<style>
+.recipe-content {
+    font-size: 16px;
+    line-height: 1.8;
+    color: #333;
+}
+
+.recipe-content h3 {
+    color: #d32f2f;
+    margin-top: 20px;
+}
+
+.recipe-content ul {
+    padding-left: 18px;
+}
+
+.recipe-content li {
+    margin-bottom: 6px;
+}
+
+.recipe-content p {
+    margin: 10px 0;
+}
+</style>
+
+{% endblock %}

@@ -1,0 +1,80 @@
+{% extends "base.html" %}
+{% block content %}
+
+<style>
+/* Background only for auth pages */
+.auth-bg {
+    background: url("https://images.unsplash.com/photo-1504674900247-0877df9cc836")
+                no-repeat center center/cover;
+    min-height: calc(100vh - 70px); /* navbar height safe */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* Bigger + centered glass box */
+.glass-box {
+    width: 440px;                /* ⬅ bigger */
+    padding: 40px;
+    border-radius: 22px;
+    background: rgba(255, 255, 255, 0.20);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    box-shadow: 0 12px 35px rgba(0,0,0,0.35);
+    color: white;
+    text-align: center;
+}
+
+/* Inputs */
+.glass-box input {
+    width: 100%;
+    height: 48px;
+    border-radius: 12px;
+    border: none;
+    margin-bottom: 16px;
+    padding-left: 12px;
+}
+
+/* Button */
+.btn-login {
+    width: 100%;
+    height: 48px;
+    border-radius: 14px;
+    background-color: #ff4d4d;
+    color: white;
+    border: none;
+    font-size: 18px;
+    transition: 0.3s;
+}
+
+.btn-login:hover {
+    background-color: #d63031;
+}
+
+.glass-box a {
+    color: #fff;
+    font-weight: bold;
+}
+</style>
+
+<div class="auth-bg">
+    <div class="glass-box">
+        <h3 style="font-weight:bold; margin-bottom:18px;">
+            🔐 Login
+        </h3>
+
+        <form method="POST">
+            <input type="text" name="username" placeholder="Username" required>
+            <input type="password" name="password" placeholder="Password" required>
+
+            <button type="submit" class="btn-login">Log In</button>
+
+            <p class="mt-3">
+                Don't have an account?
+                <a href="/auth/register"> Register</a>
+            </p>
+        </form>
+    </div>
+</div>
+
+{% endblock %}

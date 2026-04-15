@@ -1,0 +1,105 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<!-- ⭐ HERO -->
+<div style="
+    width: 100%;
+    padding: 100px 20px;
+    background: linear-gradient(135deg, #ff9966, #ff5e62);
+    color: white;
+    text-align: center;
+">
+    <h1 class="fw-bold display-4">Welcome to FoodieAI</h1>
+    <p class="fs-5">Your smart companion for recipes, blogs & AI food creation 🍽️</p>
+
+   <!-- SEARCH BAR -->
+<form action="/search" method="GET" class="mt-4 d-flex justify-content-center">
+<input 
+        type="text" 
+        name="query"
+        class="form-control w-50 p-3" 
+        placeholder="Search recipes, blogs, ingredients..."
+        style="border-radius: 30px;"
+        required
+    >
+    <button 
+        type="submit"
+        class="btn btn-dark ms-3 px-4 py-3 rounded-pill">
+          ✨ Search
+    </button>
+
+</form>
+</div>
+
+<!-- ⭐ LATEST BLOGS -->
+<div class="container mt-5 mb-5">
+  <h2 class="fw-bold mb-4">Latest Blogs</h2>
+
+  <div class="row g-4">
+
+    {% for blog in blogs %}
+    <div class="col-md-4">
+      <a href="/blogs/{{ blog.slug }}" class="text-decoration-none text-dark">
+
+        <div class="card blog-card shadow-sm border-0 h-100">
+
+          <!-- IMAGE -->
+          {% if blog.image_url %}
+            <img
+              src="{{ url_for('static', filename=blog.image_url) }}"
+              class="card-img-top"
+              alt="{{ blog.title }}">
+          {% endif %}
+
+          <div class="card-body">
+
+            <!-- TITLE -->
+            <h5 class="card-title mb-1">
+              {{ blog.title }}
+            </h5>
+
+            <!-- RECIPE NAME -->
+            {% if blog.recipe_name %}
+              <p class="fw-semibold text-muted mb-2" style="font-size:14px;">
+                🍽 {{ blog.recipe_name }}
+              </p>
+            {% endif %}
+
+
+          </div>
+        </div>
+
+      </a>
+    </div>
+    {% endfor %}
+
+  </div>
+</div>
+
+<!-- 🎨 FIXED CARD CSS -->
+<style>
+.blog-card {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.blog-card img {
+    height: 220px;
+    width: 100%;
+    object-fit: cover;
+}
+
+.blog-card .card-body {
+    flex-grow: 1;
+}
+
+.blog-card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 10px 20px rgba(0,0,0,0.15);
+    transition: 0.3s;
+}
+</style>
+
+{% endblock %}

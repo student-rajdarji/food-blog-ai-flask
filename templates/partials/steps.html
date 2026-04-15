@@ -1,0 +1,11 @@
+<h3>Steps</h3>
+
+{% if blog.steps %}
+  <ol>
+    {% for step in blog.steps.split('\n') %}
+      <li>{{ step }}</li>
+    {% endfor %}
+  </ol>
+{% else %}
+  <p><em>Steps not available.</em></p>
+{% endif %}

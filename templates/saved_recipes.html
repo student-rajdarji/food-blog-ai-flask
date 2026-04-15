@@ -1,0 +1,96 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="container mt-5 mb-5">
+    <h2 class="fw-bold mb-4">❤️ My Saved Recipes</h2>
+
+    <!-- ================= BLOG RECIPES ================= -->
+    <h4 class="mb-3">📚 Saved Blog Recipes</h4>
+
+    {% if blog_recipes %}
+    <div class="row g-4">
+        {% for blog in blog_recipes %}
+        <div class="col-md-4">
+            <div class="card shadow-sm h-100">
+
+                <img src="{{ url_for('static', filename=blog.image_url) }}"
+                class="card-img-top"
+                 style="height:230px; object-fit:cover;"
+                alt="{{ blog.title }}">
+
+                <div class="card-body text-center">
+                    <h5 class="card-title">{{ blog.title }}</h5>
+
+                    <div class="d-flex justify-content-center gap-2 mt-2">
+                        <a href="{{ url_for('blog.blog_detail', slug=blog.slug) }}"
+                           class="btn btn-primary btn-sm">
+                            View
+                        </a>
+
+                        <form method="POST"
+                              action="{{ url_for('saved.remove_saved', id=blog.saved_id) }}">
+                            <button class="btn btn-outline-danger btn-sm">
+                                Remove
+                            </button>
+                        </form>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    {% else %}
+        <p class="text-muted">No saved blog recipes yet.</p>
+    {% endif %}
+
+    <hr class="my-5">
+
+    <!-- ================= AI RECIPES ================= -->
+    <h4 class="mb-3">🤖 My AI Recipes</h4>
+
+    {% if ai_recipes %}
+    <ul class="list-group">
+        {% for ai in ai_recipes %}
+        <li class="list-group-item d-flex justify-content-between align-items-center">
+
+            <a href="{{ url_for('saved.view_ai_recipe', id=ai.id) }}"
+               class="fw-bold text-decoration-none">
+                🍽 {{ ai.title }}
+            </a>
+
+            <form method="POST"
+                  action="{{ url_for('ai_save.delete_ai_recipe', id=ai.id) }}">
+                <button class="btn btn-sm btn-outline-danger">
+                    Delete
+                </button>
+            </form>
+
+        </li>
+        {% endfor %}
+    </ul>
+    {% else %}
+        <p class="text-muted">No AI recipes saved yet.</p>
+    {% endif %}
+
+</div>
+<style>
+.saved-recipe-card img {
+    width: 100%;
+    height: 260px;
+    object-fit: cover;
+    border-radius: 8px 8px 0 0;
+}
+
+.saved-recipe-card {
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+.saved-recipe-card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.12);
+}
+</style>
+
+{% endblock %}

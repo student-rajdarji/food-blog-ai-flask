@@ -1,0 +1,163 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class="container mt-5 mb-5">
+
+    <h2 class="fw-bold text-center mb-4">🍽 Explore Food Categories</h2>
+    <p class="text-center text-muted mb-5">
+        Choose a category to explore related blogs & recipes
+    </p>
+
+    <div class="row g-4">
+
+        <!-- Healthy -->
+        <div class="col-md-4 col-sm-6">
+            <a href="{{ url_for('blog.blogs', category='Healthy') }}" class="text-decoration-none d-block">
+                <div class="category-card bg-success-subtle">
+                    <h4>🥗 Healthy</h4>
+                    <p>Nutritious & balanced meals</p>
+                </div>
+            </a>
+        </div>
+
+        <!-- Spicy -->
+        <div class="col-md-4 col-sm-6">
+            <a href="{{ url_for('blog.blogs', category='Spicy') }}" class="text-decoration-none d-block">
+                <div class="category-card bg-danger-subtle">
+                    <h4>🌶 Spicy</h4>
+                    <p>Hot & bold flavors</p>
+                </div>
+            </a>
+        </div>
+
+        <!-- Diet -->
+        <div class="col-md-4 col-sm-6">
+            <a href="{{ url_for('blog.blogs', category='Diet') }}" class="text-decoration-none d-block">
+                <div class="category-card bg-warning-subtle">
+                    <h4>🥦 Diet</h4>
+                    <p>Low calorie & light food</p>
+                </div>
+            </a>
+        </div>
+
+        <!-- Breakfast -->
+        <div class="col-md-4 col-sm-6">
+            <a href="{{ url_for('blog.blogs', category='Breakfast') }}" class="text-decoration-none d-block">
+                <div class="category-card bg-info-subtle">
+                    <h4>🥞 Breakfast</h4>
+                    <p>Perfect start to your day</p>
+                </div>
+            </a>
+        </div>
+
+        <!-- Vegan -->
+        <div class="col-md-4 col-sm-6">
+            <a href="{{ url_for('blog.blogs', category='Vegan') }}" class="text-decoration-none d-block">
+                <div class="category-card bg-success-subtle">
+                    <h4>🥕 Vegan</h4>
+                    <p>100% plant-based dishes</p>
+                </div>
+            </a>
+        </div>
+
+        <!-- Fast Food -->
+        <div class="col-md-4 col-sm-6">
+            <a href="{{ url_for('blog.blogs', category='Fast Food') }}" class="text-decoration-none d-block">
+                <div class="category-card bg-secondary-subtle">
+                    <h4>🍔 Fast Food</h4>
+                    <p>Quick & tasty favorites</p>
+                </div>
+            </a>
+        </div>
+
+        <!-- Indian -->
+        <div class="col-md-4 col-sm-6">
+            <a href="{{ url_for('blog.blogs', category='Indian') }}" class="text-decoration-none d-block">
+                <div class="category-card bg-warning-subtle">
+                    <h4>🍛 Indian</h4>
+                    <p>Traditional Indian flavors</p>
+                </div>
+            </a>
+        </div>
+
+        <!-- Italian -->
+        <div class="col-md-4 col-sm-6">
+            <a href="{{ url_for('blog.blogs', category='Italian') }}" class="text-decoration-none d-block">
+                <div class="category-card bg-danger-subtle">
+                    <h4>🍝 Italian</h4>
+                    <p>Pasta, pizza & classics</p>
+                </div>
+            </a>
+        </div>
+
+        <!-- Desserts -->
+        <div class="col-md-4 col-sm-6">
+            <a href="{{ url_for('blog.blogs', category='Dessert') }}" class="text-decoration-none d-block">
+                <div class="category-card bg-info-subtle">
+                    <h4>🍰 Desserts</h4>
+                    <p>Sweet treats & baking</p>
+                </div>
+            </a>
+        </div>
+
+        <!-- Beverages -->
+        <div class="col-md-4 col-sm-6">
+            <a href="{{ url_for('blog.blogs', category='Beverages') }}" class="text-decoration-none d-block">
+                <div class="category-card bg-primary-subtle">
+                    <h4>🧃 Beverages</h4>
+                    <p>Smoothies, juices & drinks</p>
+                </div>
+            </a>
+        </div>
+
+        <!-- High Protein -->
+        <div class="col-md-4 col-sm-6">
+            <a href="{{ url_for('blog.blogs', category='High Protein') }}" class="text-decoration-none d-block">
+                <div class="category-card bg-dark-subtle">
+                    <h4>🥩 High Protein</h4>
+                    <p>Fitness & muscle meals</p>
+                </div>
+            </a>
+        </div>
+
+        <!-- Quick & Easy -->
+        <div class="col-md-4 col-sm-6">
+            <a href="{{ url_for('blog.blogs', category='Quick & Easy') }}" class="text-decoration-none d-block">
+                <div class="category-card bg-info-subtle">
+                    <h4>⏱ Quick & Easy</h4>
+                    <p>Ready in under 30 mins</p>
+                </div>
+            </a>
+        </div>
+
+    </div>
+</div>
+
+<style>
+.category-card {
+    padding: 32px 24px;
+    border-radius: 18px;
+    min-height: 150px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    transition: 0.3s ease;
+    box-shadow: 0 6px 18px rgba(0,0,0,0.06);
+    color: #000;
+}
+
+.category-card h4 {
+    font-weight: 700;
+    font-size: 1.2rem;
+}
+
+.category-card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 14px 32px rgba(0,0,0,0.15);
+    cursor: pointer;
+}
+</style>
+
+{% endblock %}

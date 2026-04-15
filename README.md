@@ -16,3 +16,14 @@ An AI-powered food blog web app where users can generate recipes using ingredien
 ## ▶️ Run Locally
 pip install -r requirements.txt  
 python app.py
+
+# 📸 Screenshots
+
+## 🏠 Homepage
+![Homepage](screenshots/homepage.png)
+
+## 🤖 Recipe Generator
+![Recipe](screenshots/recipe.png)
+
+## 📝 Blog Page
+![Blog](screenshots/blog.png)

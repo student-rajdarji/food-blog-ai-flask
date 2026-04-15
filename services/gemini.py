@@ -1,12 +1,13 @@
-from google import genai
+import google.generativeai as genai
 import os
 from dotenv import load_dotenv
 
 load_dotenv()
 
-client = genai.Client(api_key=os.getenv("GEMINI_API_KEY"))
+# ✅ Correct setup
+genai.configure(api_key=os.getenv("GEMINI_API_KEY"))
 
-MODEL_NAME = "models/gemini-flash-latest"  # FREE model (no billing needed)
+MODEL_NAME = "gemini-pro"   # use this (stable & working)
 
 def generate_recipe(prompt):
     try:
@@ -61,14 +62,11 @@ Generate only the recipe in the above format.
 Do not add anything else before or after.
 """
 
-        response = client.models.generate_content(
-            model=MODEL_NAME,
-            contents=full_prompt
-        )
+        # ✅ Correct way to call model
+        model = genai.GenerativeModel(MODEL_NAME)
+        response = model.generate_content(full_prompt)
 
         return response.text
 
     except Exception as e:
         return f"AI Error: {str(e)}"
-
-

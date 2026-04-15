@@ -45,29 +45,3 @@ This project uses AI to generate dynamic recipes based on user input.
 ```bash
 pip install -r requirements.txt
 flask run
-
----
-
-
-## 📸 Screenshots
-
-### 🏠 Homepage
-<p align="center">
-  <img src="homepage.png" width="700">
-</p>
-
-### 🤖 Recipe Generator
-<p align="center">
-  <img src="recipe.png" width="700">
-</p>
-
-### 📝 Blog Page
-<p align="center">
-  <img src="blog.png" width="700">
-</p>
-
-### 📝 More Blog Views
-<p align="center">
-  <img src="blog1.png" width="350">
-  <img src="blog2.png" width="350">
-</p>

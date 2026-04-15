@@ -58,6 +58,6 @@ flask run
 ## 📝 Blog Page
 ![Blog](blog.png)
 
-**## 📝 More Blog Views
+## 📝 More Blog Views
 ![Blog1](blog1.png)
-![Blog2](blog2.png)**
+![Blog2](blog2.png)
